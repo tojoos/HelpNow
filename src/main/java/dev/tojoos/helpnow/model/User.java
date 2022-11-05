@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import java.util.List;
 
 @Getter
@@ -17,4 +18,6 @@ import java.util.List;
 public class User extends Person {
     @ManyToMany
     private List<Fundraise> supportedFundraises;
+    @OneToMany
+    private List<Announcement> createdAnnouncements;
 }
