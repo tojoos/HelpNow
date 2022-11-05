@@ -1,0 +1,41 @@
+package dev.tojoos.helpnow.services;
+
+import dev.tojoos.helpnow.model.Employee;
+import dev.tojoos.helpnow.repositories.EmployeeRepository;
+import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityNotFoundException;
+import java.util.List;
+import java.util.UUID;
+
+@Service
+public class EmployeeServiceImpl implements EmployeeService {
+    private final EmployeeRepository employeeRepository;
+
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
+    }
+
+    public Employee add(Employee employee) {
+        employee.setEmployeeCode(UUID.randomUUID().toString());
+        return employeeRepository.save(employee);
+    }
+
+    public Employee getById(Long id) {
+        return employeeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Employee with id=" + id + " not found."));
+    }
+
+    public List<Employee> getAll() {
+        return employeeRepository.findAll();
+    }
+
+    public Employee update(Employee employee) {
+        employeeRepository.findById(employee.getId()).orElseThrow(() -> new EntityNotFoundException("Employee with id=" + employee.getId() + " not found."));
+        return employeeRepository.save(employee);
+    }
+
+    public void deleteById(Long id) {
+        this.getById(id);
+        employeeRepository.deleteById(id);
+    }
+}
