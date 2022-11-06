@@ -15,5 +15,4 @@ import javax.persistence.MappedSuperclass;
 public abstract class Person extends BaseEntity {
     protected String email;
     protected String phone;
-    protected String imageUrl;
 }

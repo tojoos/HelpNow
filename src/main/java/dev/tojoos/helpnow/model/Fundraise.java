@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,7 +20,8 @@ import java.util.List;
 public class Fundraise extends BaseEntity {
     private String description;
     private Long requiredAmount;
-    @ManyToMany
+    private Long raisedAmount;
+    @OneToMany
     private List<Employee> assignedEmployees;
     @ManyToMany
     private List<User> supportingUsers;

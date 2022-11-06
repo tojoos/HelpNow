@@ -17,5 +17,5 @@ public class Employee extends Person {
     private String jobTitle;
     private Long salary;
     @ManyToOne
-    private Fundraise assignedFundraises;
+    private Fundraise assignedFundraise;
 }
