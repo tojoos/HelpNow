@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import java.util.List;
 
@@ -16,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 public class User extends Person {
-    @ManyToMany
+    @OneToMany
     private List<Fundraise> supportedFundraises;
     @OneToMany
     private List<Announcement> createdAnnouncements;

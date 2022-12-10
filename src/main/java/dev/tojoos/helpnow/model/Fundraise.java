@@ -1,32 +1,27 @@
 package dev.tojoos.helpnow.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import java.time.LocalDateTime;
+import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.List;
 
+@SuperBuilder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 public class Fundraise extends BaseEntity {
+    @Column(columnDefinition = "LONGTEXT")
     private String description;
     private Long requiredAmount;
     private Long raisedAmount;
     @OneToMany
     private List<Employee> assignedEmployees;
-    @ManyToMany
-    private List<User> supportingUsers;
     @ManyToOne
     private Fundraise organization;
-    private LocalDateTime startingDate;
-    private LocalDateTime endingDate;
+    private LocalDate startingDate;
+    private LocalDate endingDate;
 }
