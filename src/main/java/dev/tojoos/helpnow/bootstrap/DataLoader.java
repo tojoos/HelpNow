@@ -1,8 +1,10 @@
 package dev.tojoos.helpnow.bootstrap;
 import dev.tojoos.helpnow.model.Fundraise;
 import dev.tojoos.helpnow.model.Organization;
+import dev.tojoos.helpnow.model.Statistics;
 import dev.tojoos.helpnow.services.FundraiseService;
 import dev.tojoos.helpnow.services.OrganizationService;
+import dev.tojoos.helpnow.services.StatisticsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -22,16 +24,24 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     private final OrganizationService organizationService;
 
-    public DataLoader(FundraiseService fundraiseService, OrganizationService organizationService) {
+    private final StatisticsService statisticsService;
+
+    public DataLoader(FundraiseService fundraiseService, OrganizationService organizationService, StatisticsService statisticsService) {
         this.fundraiseService = fundraiseService;
         this.organizationService = organizationService;
+        this.statisticsService = statisticsService;
     }
 
     @Transactional
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         loadData();
+        loadStatistics();
         log.debug("Loading fake data");
+    }
+
+    private void loadStatistics() {
+        statisticsService.recalculateStatistics();
     }
 
     private void loadData() {
