@@ -1,6 +1,8 @@
 package dev.tojoos.helpnow.bootstrap;
 import dev.tojoos.helpnow.model.Fundraise;
+import dev.tojoos.helpnow.model.Organization;
 import dev.tojoos.helpnow.services.FundraiseService;
+import dev.tojoos.helpnow.services.OrganizationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -18,8 +20,11 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     private final FundraiseService fundraiseService;
 
-    public DataLoader(FundraiseService fundraiseService) {
+    private final OrganizationService organizationService;
+
+    public DataLoader(FundraiseService fundraiseService, OrganizationService organizationService) {
         this.fundraiseService = fundraiseService;
+        this.organizationService = organizationService;
     }
 
     @Transactional
@@ -30,6 +35,40 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
     }
 
     private void loadData() {
+        List<Organization> organizations = new ArrayList<>();
+
+        Organization organization1 = Organization.builder()
+                .name("Polish Aid: East and Beyond")
+                .imageUrl("https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80")
+                .description("Polish Aid is a non-profit organization that provides assistance to immigrants" +
+                        " in Poland. We offer a range of services, including language classes, cultural" +
+                        " orientation programs, and job placement assistance. Our goal is to help immigrants" +
+                        " integrate into Polish society and thrive in their new home.")
+                .createdFundraises(new ArrayList<>())
+                .build();
+
+        Organization organization2 = Organization.builder()
+                .name("Helping Hands")
+                .imageUrl("https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80")
+                .description("Helping Hands is a charity that focuses on providing support for children in need." +
+                        " We offer educational programs, extracurricular activities, and mentorship opportunities" +
+                        " to help children from disadvantaged backgrounds succeed. Our dedicated team of" +
+                        " volunteers and staff are committed to making a difference in the lives of young" +
+                        " people in Poland.")
+                .createdFundraises(new ArrayList<>())
+                .build();
+
+        Organization organization3 = Organization.builder()
+                .name("Safe Haven")
+                .imageUrl("https://images.unsplash.com/photo-1485286162995-aa63d31c06cb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80")
+                .description("Safe Haven is a charity that works to provide job training and employment" +
+                        " opportunities for young adults in eastern Poland and neighboring Ukraine. We believe" +
+                        " that everyone deserves the chance to pursue their dreams, even in the midst of war." +
+                        " Our programs include career counseling, job placement services, and entrepreneurship" +
+                        " training for young people affected by the conflict in Ukraine.")
+                .createdFundraises(new ArrayList<>())
+                .build();
+
         List<Fundraise> fundraises = new ArrayList<>();
 
         Fundraise fundraise1 = Fundraise.builder() //add imageURL
@@ -39,9 +78,10 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
                         "children in need. We need your help to reach our goal of 5000 PLN. Your donation will " +
                         "make a big difference in the lives of these children.")
                 .requiredAmount(5000L)
-                .raisedAmount(4500L)
+                .raisedAmount(5000L)
                 .startingDate(LocalDate.of(2022, Month.OCTOBER, 1))
                 .endingDate(LocalDate.of(2022, Month.NOVEMBER, 1))
+                .organization(organization1)
                 .build();
 
         Fundraise fundraise2 = Fundraise.builder()
@@ -54,6 +94,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
                 .raisedAmount(8000L)
                 .startingDate(LocalDate.of(2022, Month.DECEMBER, 1))
                 .endingDate(LocalDate.of(2023, Month.JANUARY, 1))
+                .organization(organization2)
                 .build();
 
         Fundraise fundraise3 = Fundraise.builder()
@@ -63,9 +104,10 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
                         "these services to those in need. We need your help to reach our goal of 50000 PLN. " +
                         "Your donation will make a direct impact on the lives of homeless immigrants in your community.")
                 .requiredAmount(50000L)
-                .raisedAmount(45000L)
+                .raisedAmount(28000L)
                 .startingDate(LocalDate.of(2023, Month.MARCH, 1))
                 .endingDate(LocalDate.of(2023, Month.MAY, 1))
+                .organization(organization1)
                 .build();
 
         Fundraise fundraise4 = Fundraise.builder()
@@ -79,6 +121,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
                 .raisedAmount(5000L)
                 .startingDate(LocalDate.of(2023, Month.JULY,1 ))
                 .endingDate(LocalDate.of(2023, Month.AUGUST, 1))
+                .organization(organization3)
                 .build();
 
         Fundraise fundraise5 = Fundraise.builder()
@@ -92,7 +135,19 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
                 .raisedAmount(100L)
                 .startingDate(LocalDate.of(2023, Month.SEPTEMBER, 1))
                 .endingDate(LocalDate.of(2023, Month.OCTOBER, 1))
+                .organization(organization3)
                 .build();
+
+        // causing issues with infinite loop jackson
+        organization1.getCreatedFundraises().add(fundraise1);
+        organization1.getCreatedFundraises().add(fundraise3);
+        organization2.getCreatedFundraises().add(fundraise2);
+        organization3.getCreatedFundraises().add(fundraise4);
+        organization3.getCreatedFundraises().add(fundraise5);
+
+        organizations.add(organization1);
+        organizations.add(organization2);
+        organizations.add(organization3);
 
         fundraises.add(fundraise1);
         fundraises.add(fundraise2);
@@ -101,5 +156,6 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         fundraises.add(fundraise5);
 
         fundraises.forEach(fundraiseService::add);
+        organizations.forEach(organizationService::add);
     }
 }
