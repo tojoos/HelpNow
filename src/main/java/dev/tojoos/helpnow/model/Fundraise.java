@@ -1,5 +1,6 @@
 package dev.tojoos.helpnow.model;
 
+import com.fasterxml.jackson.annotation.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -20,8 +21,10 @@ public class Fundraise extends BaseEntity {
     private Long raisedAmount;
     @OneToMany
     private List<Employee> assignedEmployees;
-    @ManyToOne
-    private Fundraise organization;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name="organization_id")
+    @JsonIgnoreProperties("fundraises")
+    private Organization organization;
     private LocalDate startingDate;
     private LocalDate endingDate;
 }
