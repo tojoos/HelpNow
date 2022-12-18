@@ -48,8 +48,8 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         List<Organization> organizations = new ArrayList<>();
 
         Organization organization1 = Organization.builder()
-                .name("Polish Aid: East and Beyond")
-                .imageUrl("https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80")
+                .name("Polish Aid: East&Beyond")
+                .imageUrl("https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80")
                 .description("Polish Aid is a non-profit organization that provides assistance to immigrants" +
                         " in Poland. We offer a range of services, including language classes, cultural" +
                         " orientation programs, and job placement assistance. Our goal is to help immigrants" +
@@ -59,7 +59,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
         Organization organization2 = Organization.builder()
                 .name("Helping Hands")
-                .imageUrl("https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80")
+                .imageUrl("https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80")
                 .description("Helping Hands is a charity that focuses on providing support for children in need." +
                         " We offer educational programs, extracurricular activities, and mentorship opportunities" +
                         " to help children from disadvantaged backgrounds succeed. Our dedicated team of" +
@@ -91,7 +91,6 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
                 .raisedAmount(5000L)
                 .startingDate(LocalDate.of(2022, Month.OCTOBER, 1))
                 .endingDate(LocalDate.of(2022, Month.NOVEMBER, 1))
-                .organization(organization1)
                 .build();
 
         Fundraise fundraise2 = Fundraise.builder()
@@ -104,7 +103,6 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
                 .raisedAmount(8000L)
                 .startingDate(LocalDate.of(2022, Month.DECEMBER, 1))
                 .endingDate(LocalDate.of(2023, Month.JANUARY, 1))
-                .organization(organization2)
                 .build();
 
         Fundraise fundraise3 = Fundraise.builder()
@@ -117,7 +115,6 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
                 .raisedAmount(28000L)
                 .startingDate(LocalDate.of(2023, Month.MARCH, 1))
                 .endingDate(LocalDate.of(2023, Month.MAY, 1))
-                .organization(organization1)
                 .build();
 
         Fundraise fundraise4 = Fundraise.builder()
@@ -131,7 +128,6 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
                 .raisedAmount(5000L)
                 .startingDate(LocalDate.of(2023, Month.JULY,1 ))
                 .endingDate(LocalDate.of(2023, Month.AUGUST, 1))
-                .organization(organization3)
                 .build();
 
         Fundraise fundraise5 = Fundraise.builder()
@@ -145,15 +141,14 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
                 .raisedAmount(100L)
                 .startingDate(LocalDate.of(2023, Month.SEPTEMBER, 1))
                 .endingDate(LocalDate.of(2023, Month.OCTOBER, 1))
-                .organization(organization3)
                 .build();
 
         // causing issues with infinite loop jackson
-        organization1.getCreatedFundraises().add(fundraise1);
-        organization1.getCreatedFundraises().add(fundraise3);
-        organization2.getCreatedFundraises().add(fundraise2);
-        organization3.getCreatedFundraises().add(fundraise4);
-        organization3.getCreatedFundraises().add(fundraise5);
+        organization1.addCreatedFundraise(fundraise1);
+        organization1.addCreatedFundraise(fundraise3);
+        organization2.addCreatedFundraise(fundraise2);
+        organization3.addCreatedFundraise(fundraise4);
+        organization3.addCreatedFundraise(fundraise5);
 
         organizations.add(organization1);
         organizations.add(organization2);

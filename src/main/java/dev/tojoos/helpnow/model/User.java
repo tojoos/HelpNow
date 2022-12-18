@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -16,7 +17,10 @@ import java.util.List;
 @Entity
 public class User extends Person {
     @OneToMany
-    private List<Fundraise> supportedFundraises;
-    @OneToMany
-    private List<Announcement> createdAnnouncements;
+    private List<Announcement> createdAnnouncements = new ArrayList<>();
+
+    public void addCreatedAnnouncement(Announcement announcement) {
+        announcement.setUser(this);
+        this.getCreatedAnnouncements().add(announcement);
+    }
 }
