@@ -1,10 +1,9 @@
 package dev.tojoos.helpnow.bootstrap;
+import dev.tojoos.helpnow.model.Announcement;
 import dev.tojoos.helpnow.model.Fundraise;
 import dev.tojoos.helpnow.model.Organization;
-import dev.tojoos.helpnow.model.Statistics;
-import dev.tojoos.helpnow.services.FundraiseService;
-import dev.tojoos.helpnow.services.OrganizationService;
-import dev.tojoos.helpnow.services.StatisticsService;
+import dev.tojoos.helpnow.model.User;
+import dev.tojoos.helpnow.services.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,15 +21,17 @@ import java.util.List;
 public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     private final FundraiseService fundraiseService;
-
     private final OrganizationService organizationService;
-
     private final StatisticsService statisticsService;
+    private final AnnouncementService announcementService;
+    private final UserService userService;
 
-    public DataLoader(FundraiseService fundraiseService, OrganizationService organizationService, StatisticsService statisticsService) {
+    public DataLoader(FundraiseService fundraiseService, OrganizationService organizationService, StatisticsService statisticsService, AnnouncementService announcementService, UserService userService) {
         this.fundraiseService = fundraiseService;
         this.organizationService = organizationService;
         this.statisticsService = statisticsService;
+        this.announcementService = announcementService;
+        this.userService = userService;
     }
 
     @Transactional
@@ -143,12 +145,113 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
                 .endingDate(LocalDate.of(2023, Month.OCTOBER, 1))
                 .build();
 
+        List<Announcement> announcements = new ArrayList<>();
+
+        Announcement announcement1 = Announcement.builder()
+                .title("Need Help Navigating Life in Poland")
+                .description("Hi, my name is Maria and I am a recent immigrant to Poland. I am struggling " +
+                        "to get settled and find my footing in this new country. I am looking for someone " +
+                        "who can help me navigate the local bureaucracy, find housing and a job, and just" +
+                        " generally adjust to life in Poland. If you have experience helping immigrants in " +
+                        "Poland and are willing to lend a hand, please get in touch. Thank you!")
+                .creationDateTime(LocalDateTime.of(2022,11,29,16,22,12))
+                .status("open")
+                .build();
+
+        Announcement announcement2 = Announcement.builder()
+                .title("Seeking Support for My Small Business in Poland")
+                .description("Hi, I am Ahmed and I recently moved to Poland with my family. I have always dreamed of starting my own small business, and I am now in the process of getting everything set up. However, I am finding it difficult to navigate the local business regulations and procedures. I am looking for someone who can help me with the paperwork and provide guidance on how to succeed as a small business owner in Poland. If you have experience in this area and are willing to help, please get in touch. Thank you!")
+                .creationDateTime(LocalDateTime.of(2022,12,2,8,10,39))
+                .status("open")
+                .build();
+
+        Announcement announcement3 = Announcement.builder()
+                .title("Need Help Finding a Job in Poland")
+                .description("Hi, my name is Alejandra and I am an immigrant to Poland from Mexico. I am highly skilled and educated, but I am having trouble finding a job in my field. I am fluent in both Spanish and English, and I am willing to learn Polish as well. I am looking for someone who can help me with my job search and provide advice on how to succeed in the Polish job market. If you have experience in this area and are willing to help, please get in touch. Thank you!")
+                .creationDateTime(LocalDateTime.of(2022,12,2,12,48,49))
+                .status("open")
+                .build();
+
+        Announcement announcement4 = Announcement.builder()
+                .title("Need Help Enrolling My Children in School in Poland")
+                .description("Hi, my name is Yara and I am an immigrant to Poland from Lebanon. I have two children who need to enroll in school, but I am having trouble understanding the local education system and the enrollment process. I am looking for someone who can help me navigate the bureaucracy and get my children enrolled in school. If you have experience in this area and are willing to help, please get in touch. Thank you!")
+                .creationDateTime(LocalDateTime.of(2022,12,12,19,11,28))
+                .status("open")
+                .build();
+
+        Announcement announcement5 = Announcement.builder()
+                .title("Looking for a Mentor to Help Me Adjust to Life in Poland")
+                .description("Hi, my name is Sita and I am an immigrant to Poland from India. I am struggling to adjust to life in a new country and I am feeling very lonely and isolated. I am looking for someone who can be a mentor and a friend, and help me navigate the local culture and customs. If you have experience living in Poland and are willing to be a mentor, please get in touch. Thank you!")
+                .creationDateTime(LocalDateTime.of(2022,12,15,7,54,19))
+                .status("closed")
+                .build();
+
+        List<User> users = new ArrayList<>();
+
+        User user1 = User.builder()
+                .name("Maria")
+                .lastName("Rodriguez")
+                .email("maria.rodriguez@gmail.com")
+                .phone("774-211-894")
+                .createdAnnouncements(new ArrayList<>())
+                .build();
+
+        User user2 = User.builder()
+                .name("Ahmed")
+                .lastName("Alibura")
+                .email("ahmed.ali@gmail.com")
+                .phone("734-669-122")
+                .createdAnnouncements(new ArrayList<>())
+                .build();
+
+        User user3 = User.builder()
+                .name("Alejandra")
+                .lastName("Gonzalez")
+                .email("alejandra.gonzalez@gmail.com")
+                .phone("890-129-700")
+                .createdAnnouncements(new ArrayList<>())
+                .build();
+
+        User user4 = User.builder()
+                .name("Yara")
+                .lastName("Hussein")
+                .email("yara.hussein@gmail.com")
+                .phone("330-226-789")
+                .createdAnnouncements(new ArrayList<>())
+                .build();
+
+        User user5 = User.builder()
+                .name("Sita")
+                .lastName("Patel")
+                .email("sita.patel@gmail.com")
+                .phone("789-127-223")
+                .createdAnnouncements(new ArrayList<>())
+                .build();
+
+        user1.addCreatedAnnouncement(announcement1);
+        user2.addCreatedAnnouncement(announcement2);
+        user3.addCreatedAnnouncement(announcement3);
+        user4.addCreatedAnnouncement(announcement4);
+        user5.addCreatedAnnouncement(announcement5);
+
         // causing issues with infinite loop jackson
         organization1.addCreatedFundraise(fundraise1);
         organization1.addCreatedFundraise(fundraise3);
         organization2.addCreatedFundraise(fundraise2);
         organization3.addCreatedFundraise(fundraise4);
         organization3.addCreatedFundraise(fundraise5);
+
+        users.add(user1);
+        users.add(user2);
+        users.add(user3);
+        users.add(user4);
+        users.add(user5);
+
+        announcements.add(announcement1);
+        announcements.add(announcement2);
+        announcements.add(announcement3);
+        announcements.add(announcement4);
+        announcements.add(announcement5);
 
         organizations.add(organization1);
         organizations.add(organization2);
@@ -162,5 +265,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
         fundraises.forEach(fundraiseService::add);
         organizations.forEach(organizationService::add);
+        users.forEach(userService::add);
+        announcements.forEach(announcementService::add);
     }
 }
