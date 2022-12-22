@@ -1,10 +1,10 @@
 package dev.tojoos.helpnow.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
@@ -15,12 +15,14 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@SuperBuilder
 public class User extends Person {
-    @OneToMany
+    @OneToMany (cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("user")
     private List<Announcement> createdAnnouncements = new ArrayList<>();
 
     public void addCreatedAnnouncement(Announcement announcement) {
-        announcement.setUser(this);
+        announcement.setAuthor(this);
         this.getCreatedAnnouncements().add(announcement);
     }
 }

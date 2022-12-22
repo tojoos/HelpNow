@@ -1,9 +1,7 @@
 package dev.tojoos.helpnow.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.MappedSuperclass;
 
@@ -12,7 +10,9 @@ import javax.persistence.MappedSuperclass;
 @NoArgsConstructor
 @AllArgsConstructor
 @MappedSuperclass
+@SuperBuilder
 public abstract class Person extends BaseEntity {
+    protected String lastName;
     protected String email;
     protected String phone;
 }
