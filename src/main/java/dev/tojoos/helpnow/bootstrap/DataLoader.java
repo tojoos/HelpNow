@@ -1,8 +1,5 @@
 package dev.tojoos.helpnow.bootstrap;
-import dev.tojoos.helpnow.model.Announcement;
-import dev.tojoos.helpnow.model.Fundraise;
-import dev.tojoos.helpnow.model.Organization;
-import dev.tojoos.helpnow.model.User;
+import dev.tojoos.helpnow.model.*;
 import dev.tojoos.helpnow.services.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
@@ -25,18 +22,21 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
     private final StatisticsService statisticsService;
     private final AnnouncementService announcementService;
     private final UserService userService;
+    private final EmployeeService employeeService;
 
-    public DataLoader(FundraiseService fundraiseService, OrganizationService organizationService, StatisticsService statisticsService, AnnouncementService announcementService, UserService userService) {
+    public DataLoader(FundraiseService fundraiseService, OrganizationService organizationService, StatisticsService statisticsService, AnnouncementService announcementService, UserService userService, EmployeeService employeeService) {
         this.fundraiseService = fundraiseService;
         this.organizationService = organizationService;
         this.statisticsService = statisticsService;
         this.announcementService = announcementService;
         this.userService = userService;
+        this.employeeService = employeeService;
     }
 
     @Transactional
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
+        addRoles();
         loadData();
         loadStatistics();
         log.debug("Loading fake data");
@@ -46,9 +46,16 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         statisticsService.recalculateStatistics();
     }
 
-    private void loadData() {
-        List<Organization> organizations = new ArrayList<>();
+    private void addRoles() {
+        Role userRole = Role.builder().name("USER").build();
+        Role employeeRole = Role.builder().name("EMPLOYEE").build();
+        Role adminRole = Role.builder().name("ADMIN").build();
 
+        List<Role> roles = new ArrayList<>(List.of(userRole, employeeRole, adminRole));
+        roles.forEach(userService::addRole);
+    }
+
+    private void loadData() {
         Organization organization1 = Organization.builder()
                 .name("Polish Aid: East&Beyond")
                 .imageUrl("https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80")
@@ -145,8 +152,6 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
                 .endingDate(LocalDate.of(2023, Month.OCTOBER, 1))
                 .build();
 
-        List<Announcement> announcements = new ArrayList<>();
-
         Announcement announcement1 = Announcement.builder()
                 .title("Need Help Navigating Life in Poland")
                 .description("Hi, my name is Maria and I am a recent immigrant to Poland. I am struggling " +
@@ -159,22 +164,22 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
                 .build();
 
         Announcement announcement2 = Announcement.builder()
-                .title("Seeking Support for My Small Business in Poland")
-                .description("Hi, I am Ahmed and I recently moved to Poland with my family. I have always dreamed of starting my own small business, and I am now in the process of getting everything set up. However, I am finding it difficult to navigate the local business regulations and procedures. I am looking for someone who can help me with the paperwork and provide guidance on how to succeed as a small business owner in Poland. If you have experience in this area and are willing to help, please get in touch. Thank you!")
+                .title("Seeking Support for My Small Business in Gliwice")
+                .description("Hi, I am Ahmed and I recently moved to Gliwice with my family. I have always dreamed of starting my own small business, and I am now in the process of getting everything set up. However, I am finding it difficult to navigate the local business regulations and procedures. I am looking for someone who can help me with the paperwork and provide guidance on how to succeed as a small business owner in Poland. If you have experience in this area and are willing to help, please get in touch. Thank you!")
                 .creationDateTime(LocalDateTime.of(2022,12,2,8,10,39))
                 .status("open")
                 .build();
 
         Announcement announcement3 = Announcement.builder()
-                .title("Need Help Finding a Job in Poland")
+                .title("Need Help Finding a Job")
                 .description("Hi, my name is Alejandra and I am an immigrant to Poland from Mexico. I am highly skilled and educated, but I am having trouble finding a job in my field. I am fluent in both Spanish and English, and I am willing to learn Polish as well. I am looking for someone who can help me with my job search and provide advice on how to succeed in the Polish job market. If you have experience in this area and are willing to help, please get in touch. Thank you!")
                 .creationDateTime(LocalDateTime.of(2022,12,2,12,48,49))
                 .status("open")
                 .build();
 
         Announcement announcement4 = Announcement.builder()
-                .title("Need Help Enrolling My Children in School in Poland")
-                .description("Hi, my name is Yara and I am an immigrant to Poland from Lebanon. I have two children who need to enroll in school, but I am having trouble understanding the local education system and the enrollment process. I am looking for someone who can help me navigate the bureaucracy and get my children enrolled in school. If you have experience in this area and are willing to help, please get in touch. Thank you!")
+                .title("Need Help Enrolling My Children in new School")
+                .description("Hi, my name is Yara and I am an immigrant to Warsaw from Lebanon. I have two children who need to enroll in school, but I am having trouble understanding the local education system and the enrollment process. I am looking for someone who can help me navigate the bureaucracy and get my children enrolled in school. If you have experience in this area and are willing to help, please get in touch. Thank you!")
                 .creationDateTime(LocalDateTime.of(2022,12,12,19,11,28))
                 .status("open")
                 .build();
@@ -186,46 +191,70 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
                 .status("closed")
                 .build();
 
-        List<User> users = new ArrayList<>();
-
         User user1 = User.builder()
                 .name("Maria")
+                .username("mari22")
+                .password("maria123")
                 .lastName("Rodriguez")
                 .email("maria.rodriguez@gmail.com")
                 .phone("774-211-894")
                 .createdAnnouncements(new ArrayList<>())
+                .roles(new ArrayList<>())
                 .build();
 
         User user2 = User.builder()
                 .name("Ahmed")
+                .username("perfectWat")
+                .password("perfectWat123")
                 .lastName("Alibura")
                 .email("ahmed.ali@gmail.com")
                 .phone("734-669-122")
                 .createdAnnouncements(new ArrayList<>())
+                .roles(new ArrayList<>())
                 .build();
 
         User user3 = User.builder()
                 .name("Alejandra")
+                .username("myusername123")
+                .password("mypassword123")
                 .lastName("Gonzalez")
                 .email("alejandra.gonzalez@gmail.com")
                 .phone("890-129-700")
                 .createdAnnouncements(new ArrayList<>())
+                .roles(new ArrayList<>())
                 .build();
 
         User user4 = User.builder()
                 .name("Yara")
+                .username("yara33")
+                .password("yara123")
                 .lastName("Hussein")
                 .email("yara.hussein@gmail.com")
                 .phone("330-226-789")
                 .createdAnnouncements(new ArrayList<>())
+                .roles(new ArrayList<>())
                 .build();
 
         User user5 = User.builder()
                 .name("Sita")
+                .username("redCamel5")
+                .password("redCamel123")
                 .lastName("Patel")
                 .email("sita.patel@gmail.com")
                 .phone("789-127-223")
                 .createdAnnouncements(new ArrayList<>())
+                .roles(new ArrayList<>())
+                .build();
+
+        User userAdmin = User.builder()
+                .name("Mark")
+                .username("markus92")
+                .password("marko$$1")
+                .lastName("Mirika")
+                .email("mark.mirika@gmail.com")
+                .phone("632-716-156")
+                .createdAnnouncements(new ArrayList<>())
+                .roles(new ArrayList<>())
                 .build();
 
         user1.addCreatedAnnouncement(announcement1);
@@ -241,21 +270,11 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         organization3.addCreatedFundraise(fundraise4);
         organization3.addCreatedFundraise(fundraise5);
 
-        users.add(user1);
-        users.add(user2);
-        users.add(user3);
-        users.add(user4);
-        users.add(user5);
+        List<User> users = new ArrayList<>(List.of(user1, user2, user3, user4, user5, userAdmin));
 
-        announcements.add(announcement1);
-        announcements.add(announcement2);
-        announcements.add(announcement3);
-        announcements.add(announcement4);
-        announcements.add(announcement5);
+        List<Announcement> announcements = new ArrayList<>(List.of(announcement1, announcement2, announcement3, announcement4, announcement5));
 
-        organizations.add(organization1);
-        organizations.add(organization2);
-        organizations.add(organization3);
+        List<Organization> organizations = new ArrayList<>(List.of(organization1, organization2, organization3));
 
         fundraises.add(fundraise1);
         fundraises.add(fundraise2);
@@ -267,5 +286,77 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         organizations.forEach(organizationService::add);
         users.forEach(userService::add);
         announcements.forEach(announcementService::add);
+
+
+        userService.addRoleToUser(user1.getUsername(), "USER");
+        userService.addRoleToUser(user2.getUsername(), "USER");
+        userService.addRoleToUser(user3.getUsername(), "USER");
+        userService.addRoleToUser(user4.getUsername(), "USER");
+        userService.addRoleToUser(user5.getUsername(), "USER");
+
+        userService.addRoleToUser(userAdmin.getUsername(), "ADMIN");
+
+        Employee employee1 = Employee.builder()
+                .name("John")
+                .lastName("Doe")
+                .employeeCode("EMP001")
+                .email("john.doe@mail.com")
+                .phone("523-456-780")
+                .salary(50000L)
+                .assignedFundraise(fundraise1)
+                .build();
+
+        Employee employee2 = Employee.builder()
+                .name("Jane")
+                .lastName("Smith")
+                .employeeCode("EMP002")
+                .email("jane.smith11@gmail.com")
+                .phone("231-567-891")
+                .salary(35000L)
+                .assignedFundraise(fundraise1)
+                .build();
+
+        Employee employee3 = Employee.builder()
+                .name("Bob")
+                .lastName("Johnson")
+                .employeeCode("EMP003")
+                .email("bob.john3@gmail.com")
+                .phone("555-958-901")
+                .salary(60000L)
+                .assignedFundraise(fundraise2)
+                .build();
+
+        Employee employee4 = Employee.builder()
+                .name("Alice")
+                .lastName("Williams")
+                .employeeCode("EMP004")
+                .email("alice.willi12@mail.com")
+                .phone("635-832-912")
+                .salary(33000L)
+                .assignedFundraise(fundraise5)
+                .build();
+
+        Employee employee5 = Employee.builder()
+                .name("Mike")
+                .lastName("Brown")
+                .employeeCode("EMP005")
+                .email("mike.brown@gmail.com")
+                .phone("156-859-053")
+                .salary(40000L)
+                .assignedFundraise(fundraise4)
+                .build();
+
+        Employee employee6 = Employee.builder()
+                .name("Sara")
+                .lastName("Davis")
+                .employeeCode("EMP006")
+                .email("sara.d@fastmail.com")
+                .phone("283-621-217")
+                .salary(75000L)
+                .assignedFundraise(fundraise3)
+                .build();
+
+        List<Employee> employees = new ArrayList<>(List.of(employee1, employee2, employee3, employee4, employee5, employee6));
+        employees.forEach(employeeService::add);
     }
 }
