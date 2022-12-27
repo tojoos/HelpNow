@@ -18,5 +18,4 @@ public abstract class BaseEntity implements Serializable {
     @Column(nullable = false, updatable = false)
     protected Long id;
     protected String name;
-    protected String imageUrl;
 }

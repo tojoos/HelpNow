@@ -26,6 +26,7 @@ public class Organization extends BaseEntity {
     private List<Fundraise> createdFundraises = new ArrayList<>();
     @Column(columnDefinition = "LONGTEXT")
     private String description;
+    private String imageUrl;
 
     public void addCreatedFundraise(Fundraise fundraise) {
         fundraise.setOrganization(this);

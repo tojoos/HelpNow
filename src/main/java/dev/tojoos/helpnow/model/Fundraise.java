@@ -20,6 +20,7 @@ public class Fundraise extends BaseEntity {
     private String description;
     private Long requiredAmount;
     private Long raisedAmount;
+    private String imageUrl;
     @OneToMany
     private List<Employee> assignedEmployees = new ArrayList<>();
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
