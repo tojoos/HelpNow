@@ -24,6 +24,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+    private String JWT_SECRET_STRING = "your_secret_here";
+
     private final UserService userService;
 
     public UserController(UserService userService) {
@@ -78,7 +80,7 @@ public class UserController {
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) { //it is token auth
             try {
                 String refreshToken = authorizationHeader.substring("Bearer ".length());
-                Algorithm algorithm = Algorithm.HMAC256("secret".getBytes()); //same secret that encoded the refreshToken
+                Algorithm algorithm = Algorithm.HMAC256(JWT_SECRET_STRING.getBytes()); //same secret that encoded the refreshToken
                 JWTVerifier verifier = JWT.require(algorithm).build();
                 DecodedJWT decodedJWT = verifier.verify(refreshToken);
                 String username = decodedJWT.getSubject();
