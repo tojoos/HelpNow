@@ -5,6 +5,7 @@ import dev.tojoos.helpnow.repositories.AnnouncementRepository;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -16,6 +17,13 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     }
 
     public Announcement add(Announcement announcement) {
+        if (announcement.getCreationDateTime() == null) {
+            announcement.setCreationDateTime(LocalDateTime.now());
+        }
+        if (announcement.getStatus() == null) {
+            announcement.setStatus("open");
+        }
+
         return announcementRepository.save(announcement);
     }
 
