@@ -40,16 +40,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         httpSecurity.authorizeRequests().antMatchers(GET, "/fundraise/**", "/statistics/**",
-                "/announcement/**", "/user/**", "/employee/**").permitAll(); //, "/organization/**"
+                "/announcement/**", "/organization/**", "/employee/**").permitAll();
         httpSecurity.authorizeRequests().antMatchers(OPTIONS, "/**").permitAll();
         httpSecurity.authorizeRequests().antMatchers(PUT, "/statistics/**").permitAll();
+        httpSecurity.authorizeRequests().antMatchers(POST, "/user/add").permitAll();
         httpSecurity.authorizeRequests().antMatchers("/login", "/user/token/refresh").permitAll();
 
         //user accesses
-        httpSecurity.authorizeRequests().antMatchers(POST, "/announcement/**").hasAnyAuthority("USER");
+        httpSecurity.authorizeRequests().antMatchers(POST, "/announcement/**").hasAnyAuthority("USER", "ADMIN");
+        httpSecurity.authorizeRequests().antMatchers(GET, "/employee/**").hasAnyAuthority("USER", "ADMIN");
 
         //admin accesses here
-        httpSecurity.authorizeRequests().antMatchers( "/**").hasAnyAuthority("ADMIN");
+        httpSecurity.authorizeRequests().antMatchers(POST,"/fundraise/**", "/statistics/**",
+                 "/organization/**", "/employee/**", "/user/**").hasAnyAuthority("ADMIN");
+        httpSecurity.authorizeRequests().antMatchers(PUT,"/fundraise/**",
+                "/announcement/**", "/organization/**", "/employee/**", "/user/**").hasAnyAuthority("ADMIN");
+        httpSecurity.authorizeRequests().antMatchers(DELETE,"/employee/**").hasAnyAuthority("ADMIN");
 
         httpSecurity.authorizeRequests().anyRequest().authenticated();
 

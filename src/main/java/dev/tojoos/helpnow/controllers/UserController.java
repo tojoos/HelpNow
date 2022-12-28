@@ -88,7 +88,7 @@ public class UserController {
 
                 String accessToken = JWT.create()
                         .withSubject(foundUser.getUsername())
-                        .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000)) //10 min refreshToken
+                        .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000)) //30 min refreshToken
                         .withIssuer(request.getRequestURL().toString())
                         .withClaim("roles", foundUser.getRoles().stream().map(Role::getName).toList())
                         .sign(algorithm);
