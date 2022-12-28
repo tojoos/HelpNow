@@ -2,6 +2,7 @@ package dev.tojoos.helpnow.services;
 
 import dev.tojoos.helpnow.model.Announcement;
 import dev.tojoos.helpnow.repositories.AnnouncementRepository;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -10,10 +11,12 @@ import java.util.List;
 
 @Service
 public class AnnouncementServiceImpl implements AnnouncementService {
+    private final UserService userService;
     private final AnnouncementRepository announcementRepository;
 
-    public AnnouncementServiceImpl(AnnouncementRepository announcementRepository) {
+    public AnnouncementServiceImpl(AnnouncementRepository announcementRepository, UserService userService) {
         this.announcementRepository = announcementRepository;
+        this.userService = userService;
     }
 
     public Announcement add(Announcement announcement) {
@@ -24,6 +27,11 @@ public class AnnouncementServiceImpl implements AnnouncementService {
             announcement.setStatus("open");
         }
 
+        if (announcement.getAuthor() != null) {
+            announcement.setAuthor(userService.getByUsername(announcement.getAuthor().getUsername()));
+        } else {
+            throw new UsernameNotFoundException("User not found in announcement with title " + announcement.getTitle());
+        }
         return announcementRepository.save(announcement);
     }
 

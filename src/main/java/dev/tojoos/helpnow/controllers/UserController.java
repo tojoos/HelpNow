@@ -44,6 +44,12 @@ public class UserController {
         return new ResponseEntity<>(foundUser, HttpStatus.OK);
     }
 
+    @GetMapping("/username/{username}")
+    public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
+        User foundUser = userService.getByUsername(username);
+        return new ResponseEntity<>(foundUser, HttpStatus.OK);
+    }
+
     @PostMapping("/add")
     public ResponseEntity<User> addUser(@RequestBody User user) {
         User addedUser = userService.add(user);
