@@ -44,10 +44,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         httpSecurity.authorizeRequests().antMatchers(OPTIONS, "/**").permitAll();
         httpSecurity.authorizeRequests().antMatchers(PUT, "/statistics/**").permitAll();
         httpSecurity.authorizeRequests().antMatchers(POST, "/user/add").permitAll();
-        httpSecurity.authorizeRequests().antMatchers("/login", "/user/token/refresh").permitAll();
+        httpSecurity.authorizeRequests().antMatchers("/login", "/user/token/refresh", "/mail/contact").permitAll();
 
         //user accesses
         httpSecurity.authorizeRequests().antMatchers(POST, "/announcement/**").hasAnyAuthority("USER", "ADMIN");
+        httpSecurity.authorizeRequests().antMatchers(POST, "/fundraise/**").hasAnyAuthority("USER");
         httpSecurity.authorizeRequests().antMatchers(GET, "/employee/**").hasAnyAuthority("USER", "ADMIN");
 
         //admin accesses here

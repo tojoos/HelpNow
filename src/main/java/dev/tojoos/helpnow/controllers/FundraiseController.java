@@ -30,14 +30,16 @@ public class FundraiseController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Fundraise> addFundraise(@RequestBody Fundraise Fundraise) {
-        Fundraise addedFundraise = fundraiseService.add(Fundraise);
+    public ResponseEntity<Fundraise> addFundraise(@RequestBody Fundraise fundraise) {
+        Fundraise addedFundraise = fundraiseService.add(fundraise);
         return new ResponseEntity<>(addedFundraise, HttpStatus.CREATED);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Fundraise> updateFundraise(@RequestBody Fundraise Fundraise) {
-        Fundraise updatedFundraise = fundraiseService.update(Fundraise);
+    public ResponseEntity<Fundraise> updateFundraise(@RequestBody Fundraise fundraise) {
+        Fundraise originalFundraise = fundraiseService.getById(fundraise.getId());
+        fundraise.setOrganization(originalFundraise.getOrganization());
+        Fundraise updatedFundraise = fundraiseService.update(fundraise);
         return new ResponseEntity<>(updatedFundraise, HttpStatus.OK);
     }
 
