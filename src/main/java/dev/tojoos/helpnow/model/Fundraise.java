@@ -25,7 +25,7 @@ public class Fundraise extends BaseEntity {
     private List<Employee> assignedEmployees = new ArrayList<>();
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name="organization_id")
-    @JsonIgnoreProperties("fundraises")
+    @JsonIgnoreProperties("createdFundraises")
     private Organization organization;
     private LocalDate startingDate;
     private LocalDate endingDate;
