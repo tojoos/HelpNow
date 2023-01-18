@@ -48,13 +48,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         //user accesses
         httpSecurity.authorizeRequests().antMatchers(POST, "/announcement/**").hasAnyAuthority("USER", "ADMIN");
-        httpSecurity.authorizeRequests().antMatchers(POST, "/fundraise/**").hasAnyAuthority("USER");
-        httpSecurity.authorizeRequests().antMatchers(GET, "/employee/**").hasAnyAuthority("USER", "ADMIN");
+        httpSecurity.authorizeRequests().antMatchers(PUT, "/fundraise/**").hasAnyAuthority("USER", "ADMIN");
+        httpSecurity.authorizeRequests().antMatchers(GET, "/employee/**").hasAnyAuthority("ADMIN");
 
         //admin accesses here
-        httpSecurity.authorizeRequests().antMatchers(POST,"/fundraise/**", "/statistics/**",
+        httpSecurity.authorizeRequests().antMatchers(POST, "/statistics/**",
                  "/organization/**", "/employee/**", "/user/**").hasAnyAuthority("ADMIN");
-        httpSecurity.authorizeRequests().antMatchers(PUT,"/fundraise/**",
+        httpSecurity.authorizeRequests().antMatchers(PUT,
                 "/announcement/**", "/organization/**", "/employee/**", "/user/**").hasAnyAuthority("ADMIN");
         httpSecurity.authorizeRequests().antMatchers(DELETE,"/employee/**").hasAnyAuthority("ADMIN");
 
