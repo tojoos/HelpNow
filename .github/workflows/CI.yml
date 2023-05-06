@@ -47,5 +47,9 @@ jobs:
       - name: Build
         run: mvn clean package -DskipTests=true
 
-      - name: Run unit tests
+      - name: Test
+        env:
+          SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/HelpNow
+          SPRING_DATASOURCE_USERNAME: ${{ secrets.MYSQL_USERNAME }}
+          SPRING_DATASOURCE_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
         run: mvn test
