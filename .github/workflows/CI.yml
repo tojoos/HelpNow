@@ -13,6 +13,18 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: HelpNow
+          MYSQL_USER: $${ MYSQL_USERNAME }
+          MYSQL_PASSWORD: $${ MYSQL_PASSWORD }
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -32,18 +44,31 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Setup DB
-        uses: mirromutth/mysql-action@v1.1
-        with:
-          mysql version: 'latest'
-          mysql database: 'HelpNow'
-          mysql user: ${{ secrets.MYSQL_LOGIN }}
-          mysql password: ${{ secrets.MYSQL_PASSWORD }}
+      - name: Install MySQL client
+        run: sudo apt-get install -y mysql-client
+
+      - name: Wait for MySQL server to start
+        run: |
+          timeout=60
+          echo "Waiting for MySQL to start..."
+          while ! mysqladmin ping --silent; do
+           timeout=$(($timeout - 1))
+           if [ $timeout -eq 0 ]; then
+               echo "Failed to start MySQL server."
+               exit 1
+           fi
+           sleep 1
+          done
+          echo "MySQL server started."
 
       - name: Build
         run: mvn clean package -DskipTests=true
 
       - name: Run unit tests
+        env:
+          SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/HelpNow
+          SPRING_DATASOURCE_USERNAME: $${ MYSQL_USERNAME }
+          SPRING_DATASOURCE_PASSWORD: $${ MYSQL_PASSWORD }
         run: mvn test
 
       - name: Build with Maven
