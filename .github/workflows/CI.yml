@@ -37,29 +37,12 @@ jobs:
       - name: Install Maven
         run: sudo apt-get install -y maven
 
-      - name: Cache the Maven packages to speed up build
+      - name: Cache the Maven packages
         uses: actions/cache@v1
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-
-      - name: Install MySQL client
-        run: sudo apt-get install -y mysql-client
-
-#      - name: Wait for MySQL server to start
-#        run: |
-#          timeout=120
-#          echo "Waiting for MySQL to start..."
-#          while ! mysqladmin ping --silent; do
-#           timeout=$(($timeout - 1))
-#           if [ $timeout -eq 0 ]; then
-#               echo "Failed to start MySQL server."
-#               exit 1
-#           fi
-#           sleep 1
-#          done
-#          echo "MySQL server started."
 
       - name: Build
         run: mvn clean package -DskipTests=true
@@ -70,6 +53,3 @@ jobs:
           SPRING_DATASOURCE_USERNAME: ${{ secrets.MYSQL_USERNAME }}
           SPRING_DATASOURCE_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
         run: mvn test
-
-      - name: Build with Maven
-        run: mvn clean install -DskipTests
