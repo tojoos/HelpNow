@@ -36,9 +36,9 @@ jobs:
         uses: mirromutth/mysql-action@v1.1
         with:
           mysql version: 'latest'
-          mysql database: 'test-db'
-          mysql user: 'root'
-          mysql password: '123456'
+          mysql database: 'HelpNow'
+          mysql user: ${{ secrets.MYSQL_LOGIN }}
+          mysql password: ${{ secrets.MYSQL_PASSWORD }}
 
       - name: Build
         run: mvn clean package -DskipTests=true
