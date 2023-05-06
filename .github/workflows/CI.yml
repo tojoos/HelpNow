@@ -19,8 +19,8 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: HelpNow
-          MYSQL_USER: ${{ MYSQL_USERNAME }}
-          MYSQL_PASSWORD: ${{ MYSQL_PASSWORD }}
+          MYSQL_USER: ${{ secrets.MYSQL_USERNAME }}
+          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
@@ -67,8 +67,8 @@ jobs:
       - name: Run unit tests
         env:
           SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/HelpNow
-          SPRING_DATASOURCE_USERNAME: ${{ MYSQL_USERNAME }}
-          SPRING_DATASOURCE_PASSWORD: ${{ MYSQL_PASSWORD }}
+          SPRING_DATASOURCE_USERNAME: ${{ secrets.MYSQL_USERNAME }}
+          SPRING_DATASOURCE_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
         run: mvn test
 
       - name: Build with Maven
