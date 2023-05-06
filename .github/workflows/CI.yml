@@ -47,19 +47,19 @@ jobs:
       - name: Install MySQL client
         run: sudo apt-get install -y mysql-client
 
-      - name: Wait for MySQL server to start
-        run: |
-          timeout=120
-          echo "Waiting for MySQL to start..."
-          while ! mysqladmin ping --silent; do
-           timeout=$(($timeout - 1))
-           if [ $timeout -eq 0 ]; then
-               echo "Failed to start MySQL server."
-               exit 1
-           fi
-           sleep 1
-          done
-          echo "MySQL server started."
+#      - name: Wait for MySQL server to start
+#        run: |
+#          timeout=120
+#          echo "Waiting for MySQL to start..."
+#          while ! mysqladmin ping --silent; do
+#           timeout=$(($timeout - 1))
+#           if [ $timeout -eq 0 ]; then
+#               echo "Failed to start MySQL server."
+#               exit 1
+#           fi
+#           sleep 1
+#          done
+#          echo "MySQL server started."
 
       - name: Build
         run: mvn clean package -DskipTests=true
