@@ -17,18 +17,6 @@ import java.time.LocalDateTime;
 @ControllerAdvice
 public class DefaultExceptionHandler {
 
-    @ExceptionHandler(UsernameNotFoundException.class)
-    public ResponseEntity<ApiError> handleException(UsernameNotFoundException ex, HttpServletRequest request) {
-        ApiError apiError = new ApiError(
-                request.getRequestURI(),
-                HttpStatus.NOT_FOUND,
-                LocalDateTime.now(),
-                ex.getMessage()
-        );
-
-        return new ResponseEntity<>(apiError, apiError.status());
-    }
-
     @ExceptionHandler(EntityNotFoundException.class)
     public final ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex, HttpServletRequest request) {
         ApiError apiError = new ApiError(
