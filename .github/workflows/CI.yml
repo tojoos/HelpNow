@@ -32,8 +32,19 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
+      - name: Setup DB
+        uses: mirromutth/mysql-action@v1.1
+        with:
+          mysql version: 'latest'
+          mysql database: 'test-db'
+          mysql user: 'root'
+          mysql password: '123456'
+
       - name: Build
         run: mvn clean package -DskipTests=true
 
-      - name: Test
+      - name: Run unit tests
         run: mvn test
+
+      - name: Build with Maven
+        run: mvn clean install -DskipTests
