@@ -55,8 +55,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Run check style
-        uses: efeozsoy/checkstyle-java-commenter@0.1.2
+      - name: Run java checkstyle
+        uses: nikitasavinov/checkstyle-action@0.6.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: 'github-pr-check'
