@@ -98,6 +98,9 @@
                     INSTANCE_INIT, ANNOTATION_DEF, ENUM_DEF, INTERFACE_DEF, RECORD_DEF,
                     COMPACT_CTOR_DEF, LITERAL_SWITCH"/>
         </module>
+        <module name="RightCurlyCheck">
+            <property name="tokens" value="LITERAL_DO,LITERAL_ELSE,LITERAL_FINALLY,LITERAL_SWITCH"/>
+        </module>
         <module name="SuppressionXpathSingleFilter">
             <!-- suppresion is required till https://github.com/checkstyle/checkstyle/issues/7541 -->
             <property name="id" value="RightCurlyAlone"/>
