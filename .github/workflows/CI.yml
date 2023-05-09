@@ -61,4 +61,3 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: 'github-pr-check'
           tool_name: 'checkstyle-java'
-          checkstyle_config: https://raw.githubusercontent.com/efeozsoy/checkstyle-java-commenter/master/custom_checker.xml
