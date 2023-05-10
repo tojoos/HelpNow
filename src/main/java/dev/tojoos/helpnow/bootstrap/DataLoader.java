@@ -1,4 +1,5 @@
 package dev.tojoos.helpnow.bootstrap;
+
 import dev.tojoos.helpnow.model.*;
 import dev.tojoos.helpnow.services.*;
 import lombok.extern.slf4j.Slf4j;

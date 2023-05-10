@@ -13,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,7 +54,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User getById(Long id) {
         log.info("Getting user with id={}", id);
-        return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User with id=" + id + " not found."));
+        return userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User with id=" + id + " not found."));
     }
 
     @Override
@@ -67,7 +66,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User update(User user) {
         log.info("Updating user {}", user.getName());
-        userRepository.findById(user.getId()).orElseThrow(() -> new EntityNotFoundException("User with id=" + user.getId() + " not found."));
+        userRepository.findById(user.getId()).orElseThrow(() -> new UsernameNotFoundException("User with id=" + user.getId() + " not found."));
         return userRepository.save(user);
     }
 

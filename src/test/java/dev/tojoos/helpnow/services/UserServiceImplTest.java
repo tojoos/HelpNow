@@ -7,10 +7,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -101,7 +100,7 @@ class UserServiceImplTest {
         //when
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertThrows(EntityNotFoundException.class, () -> userService.getById(2L), "Expected to throw, but didn't.");
+        assertThrows(UsernameNotFoundException.class, () -> userService.getById(2L), "Expected to throw, but didn't.");
 
         verify(userRepository,times(1)).findById(any());
     }
