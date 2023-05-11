@@ -85,6 +85,33 @@
                     </excludes>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.2.1</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>10.3.1</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <consoleOutput>false</consoleOutput>
+                    <configLocation>./checkstyle.xml</configLocation>
+                    <failOnViolation>true</failOnViolation>
+                    <logViolationsToConsole>true</logViolationsToConsole>
+                    <violationSeverity>warning</violationSeverity>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
