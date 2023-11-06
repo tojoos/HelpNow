@@ -65,7 +65,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         .filter(fundraise -> fundraise.getEndingDate().isBefore(LocalDate.now()))
         .count();
 
-    if (statisticsRepository.findAll().size() == 0) {
+    if (statisticsRepository.findAll().isEmpty()) {
       log.debug("No statistics found in database, recalculating from scratch.");
       Statistics statistics = new Statistics();
 

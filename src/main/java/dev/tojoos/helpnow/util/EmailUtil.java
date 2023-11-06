@@ -47,7 +47,7 @@ public class EmailUtil {
       Transport.send(createMimeMessage(email, session, subject, content));
       log.info("Email message sent successfully.");
     } catch (MessagingException | UnsupportedEncodingException e) {
-      e.printStackTrace();
+      log.error("Error while sending an email: {}", e.getMessage());
     }
   }
 

@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,8 +30,9 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/user")
+@Slf4j
 public class UserController {
-  private String jwtSecret = "189eedb8024f0489812277fb54aa0b2df5bdd2ea29fdf183ad4d8af82f9fcd53";
+  private String jwtSecret = "your_secret_here";
 
   private final UserService userService;
 
@@ -100,7 +102,7 @@ public class UserController {
 
         String accessToken = JWT.create()
                 .withSubject(foundUser.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000)) //30 min refreshToken
+                .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000)) //30 min accessToken
                 .withIssuer(request.getRequestURL().toString())
                 .withClaim("roles", foundUser.getRoles().stream().map(Role::getName).toList())
                 .sign(algorithm);
@@ -108,6 +110,8 @@ public class UserController {
         Map<String, String> tokens = new HashMap<>();
         tokens.put("access_token", accessToken);
         tokens.put("refresh_token", refreshToken);
+
+        log.info("Regenerating access and refresh token for user: " + foundUser.getUsername());
 
         response.setContentType(APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), tokens);

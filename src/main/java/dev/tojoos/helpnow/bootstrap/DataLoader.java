@@ -220,8 +220,8 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
             + "make a big difference in the lives of these children.")
         .requiredAmount(5000L)
         .raisedAmount(5000L)
-        .startingDate(LocalDate.of(2022, Month.OCTOBER, 1))
-        .endingDate(LocalDate.of(2022, Month.NOVEMBER, 1))
+        .startingDate(LocalDate.now().minusMonths(2))
+        .endingDate(LocalDate.now().minusMonths(1))
         .build();
 
     Fundraise fundraise2 = Fundraise.builder()
@@ -232,8 +232,8 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
             + "Your donation will help improve the quality of medical help.")
         .requiredAmount(15000L)
         .raisedAmount(8000L)
-        .startingDate(LocalDate.of(2022, Month.DECEMBER, 1))
-        .endingDate(LocalDate.of(2023, Month.JANUARY, 1))
+        .startingDate(LocalDate.now().minusMonths(1))
+        .endingDate(LocalDate.now().minusDays(7))
         .build();
 
     Fundraise fundraise3 = Fundraise.builder()
@@ -244,8 +244,8 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
             + "Your donation will make a direct impact on the lives of homeless immigrants in your community.")
         .requiredAmount(50000L)
         .raisedAmount(28000L)
-        .startingDate(LocalDate.of(2023, Month.MARCH, 1))
-        .endingDate(LocalDate.of(2023, Month.MAY, 1))
+        .startingDate(LocalDate.now().minusDays(14))
+        .endingDate(LocalDate.now().plusDays(17))
         .build();
 
     Fundraise fundraise4 = Fundraise.builder()
@@ -257,8 +257,8 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
             + "achieve their educational goals.")
         .requiredAmount(30000L)
         .raisedAmount(5000L)
-        .startingDate(LocalDate.of(2023, Month.JULY, 1))
-        .endingDate(LocalDate.of(2023, Month.AUGUST, 1))
+        .startingDate(LocalDate.now().minusDays(2))
+        .endingDate(LocalDate.now().plusDays(31))
         .build();
 
     Fundraise fundraise5 = Fundraise.builder()
@@ -270,8 +270,8 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
             + "help improve the health and quality of life for people in these communities.")
         .requiredAmount(7000L)
         .raisedAmount(100L)
-        .startingDate(LocalDate.of(2023, Month.SEPTEMBER, 1))
-        .endingDate(LocalDate.of(2023, Month.OCTOBER, 1))
+        .startingDate(LocalDate.now().minusDays(1))
+        .endingDate(LocalDate.now().plusDays(14))
         .build();
 
     // causing issues with infinite loop jackson
