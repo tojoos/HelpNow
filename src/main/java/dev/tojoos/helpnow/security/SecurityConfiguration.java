@@ -33,45 +33,44 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
   private final UserDetailsService userDetailsService;
-  private final BCryptPasswordEncoder bcryptPasswordEncoder;
 
   @Override
   protected void configure(HttpSecurity httpSecurity) throws Exception {
     CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
     customAuthenticationFilter.setFilterProcessesUrl("/login");
 
-    httpSecurity.csrf().disable();
-    httpSecurity.cors();
-
-    httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-    httpSecurity.authorizeRequests().antMatchers(GET, "/fundraise/**", "/statistics/**",
-                "/announcement/**", "/organization/**", "/employee/**").permitAll();
-    httpSecurity.authorizeRequests().antMatchers(OPTIONS, "/**").permitAll();
-    httpSecurity.authorizeRequests().antMatchers(PUT, "/statistics/**").permitAll();
-    httpSecurity.authorizeRequests().antMatchers(POST, "/user/add").permitAll();
-    httpSecurity.authorizeRequests().antMatchers("/login", "/user/token/refresh", "/mail/contact").permitAll();
-
-    //user accesses
-    httpSecurity.authorizeRequests().antMatchers(POST, "/announcement/**").hasAnyAuthority("USER", "ADMIN");
-    httpSecurity.authorizeRequests().antMatchers(PUT, "/fundraise/**").hasAnyAuthority("USER", "ADMIN");
-    httpSecurity.authorizeRequests().antMatchers(GET, "/employee/**").hasAnyAuthority("ADMIN");
-
-    //admin accesses here
-    httpSecurity.authorizeRequests().antMatchers(POST, "/statistics/**",
-                 "/organization/**", "/employee/**", "/user/**").hasAnyAuthority("ADMIN");
-    httpSecurity.authorizeRequests().antMatchers(PUT,
-                "/announcement/**", "/organization/**", "/employee/**", "/user/**").hasAnyAuthority("ADMIN");
-    httpSecurity.authorizeRequests().antMatchers(DELETE, "/employee/**").hasAnyAuthority("ADMIN");
-
-    httpSecurity.authorizeRequests().anyRequest().authenticated();
-
-    httpSecurity.addFilter(customAuthenticationFilter);
-    httpSecurity.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+    httpSecurity
+        .csrf().disable()
+        .cors()
+        .and()
+        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .and()
+        .authorizeRequests()
+            .antMatchers(GET, "/fundraise/**", "/statistics/**", "/announcement/**", "/organization/**", "/employee/**").permitAll()
+            .antMatchers(OPTIONS, "/**").permitAll()
+            .antMatchers(PUT, "/statistics/**").permitAll()
+            .antMatchers(POST, "/user/add").permitAll()
+            .antMatchers("/login", "/user/token/refresh", "/mail/contact").permitAll()
+            .antMatchers(POST, "/announcement/**").hasAnyAuthority("USER", "ADMIN")
+            .antMatchers(PUT, "/fundraise/**").hasAnyAuthority("USER", "ADMIN")
+            .antMatchers(GET, "/employee/**").hasAnyAuthority("ADMIN")
+            .antMatchers(POST, "/statistics/**", "/organization/**", "/employee/**", "/user/**").hasAnyAuthority("ADMIN")
+            .antMatchers(PUT, "/announcement/**", "/organization/**", "/employee/**", "/user/**").hasAnyAuthority("ADMIN")
+            .antMatchers(DELETE, "/employee/**").hasAnyAuthority("ADMIN")
+            .anyRequest().authenticated()
+        .and()
+        .addFilter(customAuthenticationFilter)
+        .addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
   }
 
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    auth.userDetailsService(userDetailsService).passwordEncoder(bcryptPasswordEncoder);
+    auth.userDetailsService(userDetailsService).passwordEncoder(this.bcryptPasswordEncoder());
+  }
+
+  @Bean
+  public BCryptPasswordEncoder bcryptPasswordEncoder() {
+    return new BCryptPasswordEncoder();
   }
 
   @Bean
