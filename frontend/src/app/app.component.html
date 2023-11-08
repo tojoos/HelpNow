@@ -1,0 +1,90 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.0/css/boxicons.min.css"
+      integrity="sha512-pVCM5+SN2+qwj36KonHToF2p1oIvoU3bsqxphdOIWMYmgr4ZqD3t5DjKvvetKhXGc/ZG5REYTT6ltKfExEei/Q=="
+      crossorigin="anonymous" referrerpolicy="no-referrer"/>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.css"
+      integrity="sha256-NAxhqDvtY0l4xn+YVa6WjAcmd94NNfttjNsDmNatFVc=" crossorigin="anonymous"/>
+
+<header class="header-area overlay">
+  <nav class="navbar navbar-expand-md navbar-dark">
+    <div class="container">
+      <a routerLink="" class="navbar-brand">HelpNow</a>
+      <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#main-nav">
+        <span class="menu-icon-bar"></span>
+        <span class="menu-icon-bar"></span>
+        <span class="menu-icon-bar"></span>
+      </button>
+      <div id="main-nav" class="collapse navbar-collapse">
+        <ul class="navbar-nav ml-auto">
+          <li><a routerLink="" class="nav-item nav-link">Home</a></li>
+          <li><a routerLink="/fundraises" class="nav-item nav-link">Fundraises</a></li>
+          <li><a routerLink="/announcements" class="nav-item nav-link">Announcements</a></li>
+          <li><a routerLink="/employees" class="nav-item nav-link">Crew</a></li>
+          <li><a routerLink="/organizations" class="nav-item nav-link">Organizations</a></li>
+          <li><a routerLink="/contact" class="nav-item nav-link">Contact</a></li>
+        </ul>
+      </div>
+      <div class="text-end ml-5">
+        <a *ngIf="isUserLoggedIn()===false" routerLink="/login" class="btn btn-outline-light me-2 btn-color">Login</a>
+        <span *ngIf="isUserLoggedIn()===true"  class="welcome-text text-light me-3">Hello, {{username}}!</span>
+        <a *ngIf="isUserLoggedIn()===true" (click)="logUserOut()" class="btn btn-outline-light me-2 btn-color">Log out</a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<router-outlet></router-outlet>
+
+<footer class="footer-area">
+  <div class="foo_top_header_one">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="footer-part">
+                    <h5>About Us</h5>
+                    <p>Our mission is to ensure that immigrants in Poland have access to the information, resources, and services they need to build strong, prosperous lives in their new home. We provide comprehensive information about the immigration process.</p>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="footer-part">
+                    <h5>Important Links</h5>
+                    <ul class="links">
+                        <li><a routerLink="/home"><i class="fa fa-angle-right" aria-hidden="true"></i>Homepage</a></li>
+                        <li><a routerLink="/fundraises"><i class="fa fa-angle-right" aria-hidden="true"></i>Help & Support</a></li>
+                        <li><a routerLink="/employees"><i class="fa fa-angle-right" aria-hidden="true"></i>Team</a></li>
+                        <li><a routerLink="/organizations"><i class="fa fa-angle-right" aria-hidden="true"></i>Partnerships</a></li>
+                        <li><a routerLink="/contact"><i class="fa fa-angle-right" aria-hidden="true"></i>Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="footer-part">
+                    <h5>Latest Announcements</h5>
+                    <div *ngFor="let announcement of latestAnnouncements" class="announcements">
+                        <a routerLink="/announcements">{{ announcement.title }}</a>
+                        <p class="kilimanjaro_date">{{ announcement.creationDateTime | date:'dd MMMM, YYYY' }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="footer-part">
+                    <h5>Quick Contact</h5>
+                    <div class="contact">
+                        <h6>Phone:</h6>
+                        <p>(+48) 532 439 812</p>
+                    </div>
+                    <div class="contact">
+                        <h6>Email:</h6>
+                        <p>contact@helpnow.com</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row copyrights text-center">
+          <div class="col-12">
+              <p>© All Rights Reserved by <a routerLink="/home" class="navbar-brand">HelpNow</a></p>
+          </div>
+        </div>
+    </div>
+  </div>
+</footer>

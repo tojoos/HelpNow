@@ -1,0 +1,52 @@
+<body>
+  <div class="container my-5">
+    <div class="card">
+      <article class="card-body">
+      <h4 class="card-title h3 mb-3 fw-normal">Register</h4>
+        <form [formGroup]="form" (submit)="register()">
+                  
+          <div class="form-floating mb-3">
+            <input formControlName="username" type="login" class="form-control" placeholder="Username" required>
+            <label>Username</label>
+          </div>
+                
+          <div class="form-floating mb-3">
+            <input formControlName="password" type="password" class="form-control" placeholder="******" required>
+            <label>Password</label>
+          </div>
+
+          <div class="form-floating mb-3">
+            <input formControlName="name" type="text" class="form-control" placeholder="First name" required>
+            <label>First Name</label>
+          </div>
+
+          <div class="form-floating mb-3">
+            <input formControlName="lastName" type="text" class="form-control" placeholder="Last Name" required>
+            <label>Last Name</label>
+          </div>
+
+          <div class="form-floating mb-3">
+            <input formControlName="email" type="email" class="is-invalid" title="Please provide a valid email address" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" class="form-control" placeholder="Email" required>
+            <label>Email address</label>
+          </div>
+
+          <div class="form-floating mb-3">
+            <input formControlName="phone" type="text" class="form-control" placeholder="Phone number">
+            <label>Phone number (Optional)</label>
+          </div>
+          
+          <div class="form-floating mb-3">
+            <input formControlName="imageUrl" type="text" class="form-control" placeholder="Image Url">
+            <label>Image Url (Optional)</label>
+          </div>
+
+          <a class="float-right" routerLink="/login"><p>Already have an account?</p></a>
+
+          <div class="form-group">
+              <button [disabled]="form.invalid" type="submit" class="submit-btn w-100 btn-lg btn-primary btn-block"> Create an account  </button>
+          </div>                                                         
+        </form>
+      </article>
+    </div> 
+  </div>  
+</body>

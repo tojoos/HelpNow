@@ -1,0 +1,31 @@
+.container {
+  width: 50%;
+}
+
+body {
+  min-height: 66vh
+}
+
+.a-btn {
+  color: #5D3FD3;
+  border-color: #6d59bc;
+}
+
+a {
+  color: #5D3FD3;
+}
+
+.a-btn:hover {
+  color: aliceblue;
+  background-color: #5D3FD3;
+  border-color: #6d59bc;
+}
+
+.submit-btn {
+  background-color: #5D3FD3;
+  border-color: #6d59bc;
+}
+
+.submit-btn:hover {
+  opacity: 0.9;
+}

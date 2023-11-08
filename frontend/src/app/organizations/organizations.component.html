@@ -1,0 +1,32 @@
+<div class="container">
+  <div *ngFor="let organization of organizations; index as i" class="how-section1">
+    <div class="row">
+      <div *ngIf="i % 2 == 0"  class="col-md-6 how-img">
+        <img src="{{organization?.imageUrl}}" class=" img-fluid" alt=""/>
+      </div>
+      <div class="col-md-6">
+        <div class="title" [ngStyle]="{'text-align': i % 2 === 0 ? 'left' : 'right'}">{{organization?.name}}</div>
+        <p class="text mb-1" [ngStyle]="{'text-align': i % 2 === 0 ? 'left' : 'right'}">{{organization?.description}}</p>
+
+        <div class="row mt-1">
+          <div class="avatar-text rotated col-md-1" style="justify-content: center;">Fundraises</div>
+          <div class="col-md-11 mt-1">
+            <div *ngFor="let fundraise of organization.createdFundraises" class="d-flex no-block card-body fundraise-card">
+              <div class="mr-3">
+                <h5 class="date-text">{{ fundraise?.startingDate | date:'dd' }}</h5>
+                <span class="date-text">{{ fundraise?.startingDate | date:'MMM' }}</span>
+              </div>
+              <div style="display: flex; align-items: center;">
+                <a routerLink="/fundraises" class="m-b-0 font-small p-0">{{fundraise.name}}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="i % 2 == 1" class="col-md-6 how-img">
+        <img src="{{organization?.imageUrl}}" class=" img-fluid" alt=""/>
+      </div>
+    </div>
+  </div>
+</div>

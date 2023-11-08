@@ -1,0 +1,142 @@
+<div class="container" id="main-container" style="min-height: 64vh;">
+  <div class="row text-center text-black mb-5 mt-4">
+    <div class="col-lg-8 mx-auto">
+        <h1 class="display-4">Our fundraises</h1>
+        <p class="lead mb-0">Chose the cause you want to support and help today!</p>
+    </div>
+  </div>
+
+  <div *ngFor="let fundraise of fundraises" class="card mb-3" [ngClass]="{'muted': isFundraiseFinished(fundraise)}">
+    <div class="card-body">
+      <div class="d-flex flex-column flex-lg-row">
+        <div><img src="{{fundraise?.organization?.imageUrl}}" alt=""
+          class="avatar rounded-circle rounded-3 me-4 mb-2"/></div>
+        <div class="row flex-fill">
+          <div class="col-sm-10">
+            <h4 class="h5">{{fundraise?.name}}</h4>
+            <div class="progress mt-1 " data-height="8" style="height: 8px;">
+              <div class="progress-bar" role="progressbar"
+                   [style.width]="fundraise.raisedAmount / fundraise.requiredAmount * 100 + '%'"
+                   [style.left]="(fundraise.raisedAmount / fundraise.requiredAmount * 95) + '%'"
+                   [attr.aria-valuenow]="fundraise.raisedAmount / fundraise.requiredAmount * 100"
+                   aria-valuemin="0" aria-valuemax="100"><span class="amountBadge" style="position: absolute;">{{fundraise?.raisedAmount}} PLN</span>
+              </div>  
+            </div>
+            <div class="row">
+              <div class="col-sm-4 py-2">
+                <span class="orgName">Promoter: <i>{{fundraise?.organization?.name}}</i></span>
+              </div>
+              <div class="col-sm-4">
+                <span class="percentDisplay">{{(fundraise.raisedAmount / fundraise.requiredAmount * 100).toFixed(0)}} %</span>
+              </div>
+              <div class="col-sm-4 py-2">
+                <span class="amountBadge" style="float: right">{{fundraise?.requiredAmount}} PLN</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <p class="timeCount">{{calculateTillFundraise(fundraise)}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-10 pt-2 lead" style="text-align: justify; font-size: 16px;">
+          <p>{{fundraise?.description}}</p>
+        </div>
+        <div class="col-sm-2 pt-2" style="text-align: justify; text-align: center">
+          <i [ngStyle]="{'pointer-events': isFundraiseFinished(fundraise) ? 'none' : 'auto'}" class="helpButton fa-solid fa-hand-holding-dollar" (click)="onHelpModal(fundraise)"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="fundraises?.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+    <div class="alert alert-info" role="alert">
+      <h4 class="alert-heading">No Fundraises were found!</h4>
+      <p>We'll let you know when charity collections appear.</p>
+    </div>
+  </div>
+  
+</div>
+
+<section class="counter">
+  <div class="container">
+    <div class="counter__content">
+      <div *ngIf="statistics" class="row">
+        <div class="col-lg-3 col-md-6 col-sm-6">
+          <div class="counter__item">
+            <div class="counter__item__text">
+              <i class="icon fa-solid fa-clipboard-check fa-3x"></i>
+              <h2 class="counter_num number" style="--to: {{statistics?.completedFundraises}};"></h2>
+              <p>Completed Fundraises</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6">
+          <div class="counter__item second__item">
+            <div class="counter__item__text">
+              <i class="icon far fa-regular fa-money-bill-1 fa-3x"></i>
+              <h2 class="counter_num number" style="--to: {{statistics?.totalFundsRaised}};"></h2>
+              <p>Total funds raised (PLN)</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6">
+          <div class="counter__item third__item">
+            <div class="counter__item__text">
+              <i class="icon far fa-smile-beam fa-3x"></i>
+              <h2 class="counter_num number" style="--to: {{statistics?.peopleHelped}};"></h2>
+              <p>People helped</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6">
+          <div class="counter__item four__item">
+            <div class="counter__item__text">
+              <i class="icon fa-solid fa-eye fa-3x"></i>
+              <h2 class="counter_num number" style="--to: {{statistics?.serviceVisits}};"></h2>
+              <p>Service visits</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="modal fade" id="addAnnouncementModal" tabindex="-1" role="dialog" aria-labelledby="addAnnouncementModalLabel"
+     style="margin-top: 15%;" aria-hidden="true">
+  <div class="modal-dialog mt-5" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addAnnouncementModalLabel">Donate to the cause</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="form-wrapper">
+          <form #addForm="ngForm" [formGroup]="formGroup" (ngSubmit)="onHelpButton(formGroup)">
+            <h1 id="form-title">Chose a donation value:</h1>
+            <div class="form-group">
+              <div id="amount-slider">
+                <input type="radio" name="amount" formControlName="amount" id="1" value="5" required>
+                <label for="1" data-amount="5 PLN"></label>
+                <input type="radio" name="amount" formControlName="amount" id="2" value="10" required>
+                <label for="2" data-amount="10 PLN"></label>
+                <input type="radio" name="amount" formControlName="amount" id="3" value="50" required>
+                <label for="3" data-amount="50 PLN"></label>
+                <input type="radio" name="amount" formControlName="amount" id="4" value="100" required>
+                <label for="4" data-amount="100 PLN"></label>
+                <input type="radio" name="amount" formControlName="amount" id="5" value="500" required>
+                <label for="5" data-amount="500 PLN"></label>
+                <div id="amount-pos"></div>
+              </div>
+            </div>
+            <button [disabled]="addForm.invalid" type="submit" id="donate-button">Help Now!</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,31 @@
+<body>
+  <div class="container my-5">
+    <div class="card">
+      <article class="card-body">
+      <a routerLink="/register" class="float-right btn btn-outline-primary a-btn">Sign up</a>
+      <h4 class="card-title h3 mb-3 fw-normal">Please log in</h4>
+      <form [formGroup]="form" (submit)="login()">
+                
+        <div class="form-floating mb-3">
+          <input formControlName="username" type="login" class="form-control" placeholder="Username">
+          <label>Username</label>
+        </div>
+              
+        <div class="form-floating mb-3">
+          <input formControlName="password" type="password" class="form-control" placeholder="******">
+          <label>Password</label>
+        </div>
+        <a class="float-right" href="#">Forgot password?</a>
+        <div class="form-group"> 
+          <div class="checkbox">
+            <label> <input id="loginCheckbox" type="checkbox"> Remember me </label>
+          </div>
+        </div> 
+        <div class="form-group">
+            <button type="submit" class="submit-btn w-100 btn-lg btn-primary btn-block"> Login  </button>
+        </div>                                                         
+      </form>
+      </article>
+    </div> 
+  </div>  
+</body>
