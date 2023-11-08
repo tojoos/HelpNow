@@ -32,6 +32,12 @@ The primary focus throughout the development process was to ensure the achieveme
 
 ## Getting Started
 
+### Frontend
+
+To run client application locally using `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+
+### Backend
+
 To run the HelpNow backend application locally, follow these steps:
 
 1. Clone the repository: `git clone <repository-url>`
@@ -69,3 +75,5 @@ Contributions are welcome! If you have any suggestions, improvements, or new fea
 ## License
 
 This project is licensed under the [MIT License](LICENSE). Feel free to use, modify, and distribute the application as per the terms of the license.
+
+
