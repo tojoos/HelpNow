@@ -1,0 +1,64 @@
+version: "3"
+services:
+  database:
+    image: mysql:8.0.33
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: HelpNow
+    expose:
+      - 3306   
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - backend-database
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "--silent"]
+      interval: 3s
+      retries: 5
+      start_period: 30s
+
+  backend:
+    container_name: helpnow-backend
+    build: 
+      context: ./backend
+    restart: always
+    environment:
+      MYSQL_DATABASE: HelpNow
+      MYSQL_HOST: database
+      MYSQL_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+    expose:
+      - 8080  
+    ports:
+      - 8080:8080
+    networks:
+      - frontend-backend
+      - backend-database
+    depends_on:
+      database:
+        condition: service_healthy
+
+  frontend:
+    container_name: helpnow-frontend
+    build:
+      context: ./frontend
+    restart: always  
+    expose:
+      - 4200  
+    ports:
+      - 4200:4200
+    depends_on:
+      - backend
+    networks:
+      - frontend-backend
+
+volumes:
+  mysql_data: {}
+
+networks:
+  frontend-backend: {}
+  backend-database: {}      
