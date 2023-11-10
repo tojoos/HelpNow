@@ -32,11 +32,17 @@ The primary focus throughout the development process was to ensure the achieveme
 
 ## Getting Started
 
-### Frontend
+### Docker compose
+
+To run all applications use `docker-compose up` command in the directory of the `compose.yml` file. The user interface will be available under the `localhost:4200` endpoint.
+
+### Manually running containers
+
+#### Frontend
 
 To run client application locally using `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-### Backend
+#### Backend
 
 To run the HelpNow backend application locally, follow these steps:
 
@@ -53,6 +59,12 @@ To run the HelpNow backend application locally, follow these steps:
 6. Start the application: `mvn spring-boot:run`
 
 7. The backend server should now be running on `http://localhost:8080`
+
+#### Database
+
+Run mysql container locally:
+
+`docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=$MYSQL_PASSWORD -e MYSQL_ROOT_HOST=% -p 3306:3306 -it -d mysql`
 
 ## Application Preview
 
