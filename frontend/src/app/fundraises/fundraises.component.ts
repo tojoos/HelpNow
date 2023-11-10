@@ -15,6 +15,8 @@ export class FundraisesComponent implements OnInit {
   public fundraises: Fundraise[] = [];
   public edittedFundraise!: Fundraise;
   public statistics: Statistics | any;
+  public modalTitle: String = '';
+  public modalMessage: String = '';
 
   formGroup = new FormGroup({
     amount: new FormControl(),
@@ -38,7 +40,7 @@ export class FundraisesComponent implements OnInit {
         this.statistics = response as Statistics;
       },
       error: (error: HttpErrorResponse) => {
-        alert(error.message);
+        this.showModalWithMessage('Error occured', error.message);
       }
     });
 
@@ -56,7 +58,7 @@ export class FundraisesComponent implements OnInit {
         console.log(response);
         },
       error: (error: HttpErrorResponse) => {
-        alert(error.message);
+        this.showModalWithMessage('Error occured', error.message);
       },
     });
   }
@@ -69,7 +71,7 @@ export class FundraisesComponent implements OnInit {
         this.fundraises.sort((f1, f2) => this.isFundraiseFinished(f2) ? -1 : 1)
       },
       error: (error: HttpErrorResponse) => {
-        alert(error.message);
+        this.showModalWithMessage('Error occured', error.message);
       }
     });
   }
@@ -95,28 +97,30 @@ export class FundraisesComponent implements OnInit {
 
   public onHelpButton(helpForm: FormGroup): void {
     document.getElementById('donate-button')!.click();
+    var editedFundraiseCopy = { ...this.edittedFundraise };
+    const newAmount = Number(this.edittedFundraise.raisedAmount) + Number(helpForm.value.amount);
 
-    console.log(helpForm.value.amount)
-    this.edittedFundraise.raisedAmount = Number(this.edittedFundraise.raisedAmount) + Number(helpForm.value.amount)
+    editedFundraiseCopy.raisedAmount = newAmount;
 
-    this.fundraiseService.updateFundraise(this.edittedFundraise).subscribe({
+    this.fundraiseService.updateFundraise(editedFundraiseCopy).subscribe({
       next: (response: Fundraise) => {
+        this.edittedFundraise.raisedAmount = newAmount;
         console.log(response);
         this.getFundraises();
         helpForm.reset();
         },
       error: (error: HttpErrorResponse) => {
         if (error.status === 403) {
-          alert("Couldn't create an announcement. Make sure you are logged in.")
+          console.log('Couldn\'t create an announcement. Make sure you are logged in.')
+          this.showModalWithMessage('Please log in', 'Couldn\'t create an announcement. Make sure you are logged in.');
         } else {
-          alert(error)
+          console.log(error.message);
+          this.showModalWithMessage('Error occured', error.message);
         }
         this.getFundraises();
         helpForm.reset();
       }
     });
-    this.edittedFundraise.raisedAmount = Number(this.edittedFundraise.raisedAmount) - Number(helpForm.value.amount)
-    this.getFundraises();
   }
 
   public onHelpModal(fundraise?: Fundraise): void {
@@ -127,6 +131,19 @@ export class FundraisesComponent implements OnInit {
     button.style.display = 'none';
     button.setAttribute('data-toggle', 'modal');
     button.setAttribute('data-target', '#addAnnouncementModal');
+    container!.appendChild(button);
+    button.click();
+  }
+
+  private showModalWithMessage(title: string, message: string) {
+    this.modalTitle = title;
+    this.modalMessage = message;
+    const container = document.getElementById('main-container');
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.style.display = 'none';
+    button.setAttribute('data-toggle', 'modal');
+    button.setAttribute('data-target', '#alertModal');
     container!.appendChild(button);
     button.click();
   }

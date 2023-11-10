@@ -23,7 +23,7 @@ export class OrganizationsComponent implements OnInit {
         this.organizations = response;
       },
       error: (error: HttpErrorResponse) => {
-        alert(error.message);
+        console.log(error.message);
       }
     });
   }

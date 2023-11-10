@@ -33,6 +33,9 @@ export class EmployeesComponent implements OnInit {
           console.log(error.message);
           if (error.status === 403) {
             this.showModalWithMessage('Access denied', 'No sufficient access permissions. To manage employee login as administrator.')
+          } else {
+            console.log(error.message);
+            this.showModalWithMessage('Error occured', error.message);
           }
       }
     });
@@ -50,6 +53,9 @@ export class EmployeesComponent implements OnInit {
         console.log(error.message);
         if (error.status === 403) {
           this.showModalWithMessage('Access denied', 'No sufficient access permissions. To add new employee, please log in as administrator.')
+        } else {
+          console.log(error.message);
+          this.showModalWithMessage('Error occured', error.message);
         }
         addForm.reset();
       }
@@ -64,6 +70,7 @@ export class EmployeesComponent implements OnInit {
         this.getEmployees();
         },
       error: (error: HttpErrorResponse) => {
+        console.log(error.message);
         this.showModalWithMessage('Error occured', error.message);
       }
     });
@@ -76,6 +83,7 @@ export class EmployeesComponent implements OnInit {
         this.getEmployees();
         },
       error: (error: HttpErrorResponse) => {
+        console.log(error.message);
         this.showModalWithMessage('Error occured', error.message);
       }
     });

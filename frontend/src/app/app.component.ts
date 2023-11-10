@@ -62,7 +62,7 @@ export class AppComponent implements OnInit {
         this.latestAnnouncements = announcement.slice(0,2)
         },
       error: (error: HttpErrorResponse) => {
-        alert(error.message);
+        console.log(error.message);
       }
     });
   }
