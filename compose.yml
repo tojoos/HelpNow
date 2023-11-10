@@ -19,6 +19,7 @@ services:
       interval: 3s
       retries: 5
       start_period: 30s
+      timeout: 15s
 
   backend:
     container_name: helpnow-backend
@@ -27,6 +28,7 @@ services:
     restart: always
     environment:
       MYSQL_DATABASE: HelpNow
+      # the access to database using internal docker network (service name as a host)
       MYSQL_HOST: database
       MYSQL_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MAIL_USERNAME: ${MAIL_USERNAME}
