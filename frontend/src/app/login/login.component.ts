@@ -12,6 +12,8 @@ import { environment } from 'src/environments/environment';
 export class LoginComponent implements OnInit {
   private apiServerUrl = environment.apiServerUrl;
   form!: FormGroup;
+  public modalTitle: String = '';
+  public modalMessage: String = '';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -57,11 +59,26 @@ export class LoginComponent implements OnInit {
         },
       error: (error: HttpErrorResponse) => {
         if (error.status === 403) {
-          alert('Failed to login, please make sure that you are using valid credentials.');
+          console.log(error.message);
+          console.log('Failed to login, please make sure that you are using valid credentials.')
+          this.showModalWithMessage('Failed to login', 'Failed to login, please make sure that you are using valid credentials.')
         } else {
           alert(error)
         }
       }
     });
+  }
+
+  private showModalWithMessage(title: string, message: string) {
+    this.modalTitle = title;
+    this.modalMessage = message;
+    const container = document.getElementById('main-container');
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.style.display = 'none';
+    button.setAttribute('data-toggle', 'modal');
+    button.setAttribute('data-target', '#alertModal');
+    container!.appendChild(button);
+    button.click();
   }
 }

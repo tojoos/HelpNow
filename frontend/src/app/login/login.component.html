@@ -1,5 +1,5 @@
 <body>
-  <div class="container my-5">
+  <div class="container my-5" id="main-container">
     <div class="card">
       <article class="card-body">
       <a routerLink="/register" class="float-right btn btn-outline-primary a-btn">Sign up</a>
@@ -29,3 +29,24 @@
     </div> 
   </div>  
 </body>
+
+<div class="modal fade" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="confirmationMessageLabel"
+  style="margin-top: 15%;" aria-hidden="true">
+  <div class="modal-dialog mt-5" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmationMessageLabel">{{this.modalTitle}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>{{this.modalMessage}}</p>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary mb-0" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
