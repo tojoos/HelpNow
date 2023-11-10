@@ -12,6 +12,12 @@ RUN npm install
 # Copy all files
 COPY . .
 
-EXPOSE 4200
+RUN npm run build
 
-CMD ["npm", "start"]
+# Serve Application using Nginx Server
+FROM nginx:alpine
+
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY --from=builder /app/dist/help-now-app-front /usr/share/nginx/html
+
+EXPOSE 80
