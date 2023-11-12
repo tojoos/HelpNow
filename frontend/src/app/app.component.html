@@ -19,8 +19,8 @@
           <li><a routerLink="" class="nav-item nav-link">Home</a></li>
           <li><a routerLink="/fundraises" class="nav-item nav-link">Fundraises</a></li>
           <li><a routerLink="/announcements" class="nav-item nav-link">Announcements</a></li>
-          <li><a routerLink="/employees" class="nav-item nav-link">Crew</a></li>
           <li><a routerLink="/organizations" class="nav-item nav-link">Organizations</a></li>
+          <li><a routerLink="/employees" [ngClass]="{'disabled text-muted': isUserLoggedIn() === false}" class="nav-item nav-link">Crew</a></li>
           <li><a routerLink="/contact" class="nav-item nav-link">Contact</a></li>
         </ul>
       </div>
