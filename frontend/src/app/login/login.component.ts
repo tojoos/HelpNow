@@ -55,7 +55,9 @@ export class LoginComponent implements OnInit {
           sessionStorage.setItem('refresh_token', response.refresh_token);
         }
 
-        this.router.navigate(['/']);
+        this.router.navigate(['/']) .then(() => {
+          window.location.reload();
+        });
         },
       error: (error: HttpErrorResponse) => {
         if (error.status === 403) {
